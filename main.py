@@ -38,6 +38,26 @@ def load_image(name, color_key=None):
     return image
 
 
+class SpriteGroup(pygame.sprite.Group):
+
+    def __init__(self):
+        super().__init__()
+
+    def get_event(self, event):
+        for sprite in self:
+            sprite.get_event(event)
+
+
+class Sprite(pygame.sprite.Sprite):
+
+    def __init__(self, group):
+        super().__init__(group)
+        self.rect = None
+
+    def get_event(self, event):
+        pass
+
+
 class Board:
     # создание поля
     def __init__(self, width, height):
@@ -78,18 +98,34 @@ class Board:
             if (i[0], i[1] + 1) not in list_:
                 free_cubes.append(i)
         for i in free_cubes:
-            if coords[1] + i[1] + 1 == len(self.board):
+            if coords[1] + i[1] + 1 >= len(self.board):
                 return False
             if self.board[coords[1] + i[1] + 1][coords[0] + i[0]] != 0:
                 return False
         return True
 
+    def scan_up(self, list_, coords):
+        free_cubes = []
+        for i in list_:
+            if (i[0], i[1] - 1) not in list_:
+                free_cubes.append(i)
+        for i in free_cubes:
+            if coords[1] + i[1] - 1 < 4:
+                return True
+        return False
+
 
 class Figure:
-    def __init__(self):
-        self.name = random.choice(list(types_coords.keys()))
+    def __init__(self, name=""):
+        if name == "":
+            self.name = random.choice(list(types_coords.keys()))
+        else:
+            self.name = name
         self.coords, self.color = types_coords[self.name]
+        self.sprites = []
         self.x, self.y = 5, 1
+        for i in self.coords:
+            self.sprites.append(Figure_Sprite(self.name, i, self.x, self.y, board))
         self.Stop = False
         self.num_rotation = 0
         self.update()
@@ -103,6 +139,8 @@ class Figure:
             self.Stop = True
 
     def Lose(self):
+        if board.scan_up(self.coords, (self.x, self.y)):
+            return True
         return False
 
     def Rotate(self, num):
@@ -114,11 +152,45 @@ class Figure:
             board.change_board(self.coords, (self.x, self.y), self.color)
 
     def Move(self, vector):
-        print("Move " + vector)
+        if vector == "down" and board.scan_down(self.coords, (self.x, self.y)):
+            board.change_board(self.coords, (self.x, self.y), 0)
+            self.y += 1
+            board.change_board(self.coords, (self.x, self.y), self.color)
+
+    def In_Next(self):
+        self.x, self.y = 2, 0
+        self.Stop = False
+        board_next.change_board(self.coords, (self.x, self.y), self.color)
+        for i in range(len(self.sprites)):
+            self.sprites[i].Move(self.coords[i], self.x, self.y, board_next)
+
+    def Out_next(self):
+        for i in self.sprites:
+            Figures_sprites.remove(i)
+        self.sprites.clear()
+        for i in self.coords:
+            self.sprites.append(Figure_Sprite(self.name, i, self.x, self.y, board))
+
+
+class Figure_Sprite(Sprite):
+    def __init__(self, name, coord, x, y, game_board):
+        super().__init__(Figures_sprites)
+        self.image = load_image(name + "-block.png")
+        self.rect = self.image.get_rect().move(game_board.left + (x + coord[0]) * game_board.cell_size,
+                                               game_board.top + (y + coord[1]) * game_board.cell_size)
+
+    def Move(self, coord, x, y, game_board):
+        self.rect = self.image.get_rect().move(game_board.left + (x + coord[0]) * game_board.cell_size,
+                                               game_board.top + (y + coord[1]) * game_board.cell_size)
 
 
 def Check_Board():
-    pass
+    for i in range(len(board.board)):
+        if 0 not in board.board[i]:
+            up = board.board[:i]
+            down = board.board[i + 1:]
+            board.board = list(map(lambda x: 0, board.board[i])) + up + down
+
 
 
 def Create_Archive():
@@ -164,11 +236,15 @@ def start_screen():
 
 
 if __name__ == '__main__':
+    Figures_sprites = SpriteGroup()
     pygame.init()
     size = (800, 950)
     screen = pygame.display.set_mode(size)
     board = Board(10, 24)
     board.set_view(100, -120, 40)
+
+    board_next = Board(4, 2)
+    board_next.set_view(560, 120, 40)
 
     running = True
     clock = pygame.time.Clock()
@@ -177,9 +253,13 @@ if __name__ == '__main__':
     start_screen()
 
     Main_Figure = Figure()
-    Archive_Figure = Figure()
+    Archive_Figure = None
+    Next_Figure = Figure()
+    Next_Figure.In_Next()
     score = 0
     while running:
+        font = pygame.font.Font("data/F77 Minecraft.ttf", 23)
+        endGame = pygame.font.Font("data/F77 Minecraft.ttf", 47)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -202,16 +282,22 @@ if __name__ == '__main__':
         if Main_Figure.Stop:
             if not Main_Figure.Lose():
                 Check_Board()
-                Main_Figure = Figure()
+                Main_Figure = Figure(name=Next_Figure.name)
+                Next_Figure.Out_next()
+                Next_Figure = Figure()
+                Next_Figure.In_Next()
+            else:
+                string_rendered = endGame.render("Вы проиграли", True, pygame.Color('white'))
+                screen.blit(string_rendered, pygame.Rect(100, 860, 0, 0))
         board.test_render(screen)
         pygame.draw.rect(screen, pygame.Color("black"), (0, 0, 700, 40))
-        pygame.draw.rect(screen, pygame.Color("white"), (520, 80, 240, 200), width=1)
+        pygame.draw.rect(screen, pygame.Color("white"), (520, 80, 240, 160), width=1)
         pygame.draw.rect(screen, pygame.Color("white"), (520, 360, 240, 200), width=1)
-        font = pygame.font.Font("data/F77 Minecraft.ttf", 23)
         string_rendered = font.render("Следующая фигура", True, pygame.Color('white'))
         screen.blit(string_rendered, pygame.Rect(520, 40, 0, 0))
         string_rendered = font.render("Карман", True, pygame.Color('white'))
         screen.blit(string_rendered, pygame.Rect(600, 320, 0, 0))
+        Figures_sprites.draw(screen)
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
