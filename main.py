@@ -185,12 +185,17 @@ class Figure_Sprite(Sprite):
 
 
 def Check_Board():
+    num = 0
+    sl = {1: 40, 2: 100, 3: 300, 4: 1200}
     for i in range(len(board.board)):
         if 0 not in board.board[i]:
+            num += 1
             up = board.board[:i]
             down = board.board[i + 1:]
             board.board = list(map(lambda x: 0, board.board[i])) + up + down
-
+    if num:
+        return sl[num]
+    return 0
 
 
 def Create_Archive():
@@ -251,12 +256,12 @@ if __name__ == '__main__':
     pygame.time.set_timer(pygame.USEREVENT, 500)
 
     start_screen()
+    score = 0
 
     Main_Figure = Figure()
     Archive_Figure = None
     Next_Figure = Figure()
     Next_Figure.In_Next()
-    score = 0
     while running:
         font = pygame.font.Font("data/F77 Minecraft.ttf", 23)
         endGame = pygame.font.Font("data/F77 Minecraft.ttf", 47)
@@ -281,11 +286,13 @@ if __name__ == '__main__':
         screen.fill((0, 0, 0))
         if Main_Figure.Stop:
             if not Main_Figure.Lose():
-                Check_Board()
+                score += Check_Board()
                 Main_Figure = Figure(name=Next_Figure.name)
                 Next_Figure.Out_next()
                 Next_Figure = Figure()
                 Next_Figure.In_Next()
+                string_rendered = endGame.render("Счёт: " + str(score), True, pygame.Color('white'))
+                screen.blit(string_rendered, pygame.Rect(200, 860, 0, 0))
             else:
                 string_rendered = endGame.render("Вы проиграли", True, pygame.Color('white'))
                 screen.blit(string_rendered, pygame.Rect(100, 860, 0, 0))
@@ -297,6 +304,9 @@ if __name__ == '__main__':
         screen.blit(string_rendered, pygame.Rect(520, 40, 0, 0))
         string_rendered = font.render("Карман", True, pygame.Color('white'))
         screen.blit(string_rendered, pygame.Rect(600, 320, 0, 0))
+        if not Main_Figure.Stop:
+            string_rendered = endGame.render("Счёт: " + str(score), True, pygame.Color('white'))
+            screen.blit(string_rendered, pygame.Rect(200, 860, 0, 0))
         Figures_sprites.draw(screen)
         clock.tick(60)
         pygame.display.flip()
