@@ -95,12 +95,13 @@ class Figure:
         self.dx = 0
         self.update()
 
-    def update(self):
+    def update(self, flag=False):
         if board.scan_down(self.coords, (self.x, self.y)):
             board.change_board(self.coords, (self.x, self.y), 0)
             self.x += self.dx
             self.dx = 0
-            self.y += 1
+            if not flag:
+                self.y += 1
             board.change_board(self.coords, (self.x, self.y), self.color)
         else:
             self.Stop = True
@@ -121,6 +122,8 @@ class Figure:
             self.dx -= 1
         elif vector == 'right':
             self.dx += 1
+        flag = True
+        self.update(flag)
 
 def Check_Board():
     pass
