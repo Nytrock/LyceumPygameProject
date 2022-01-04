@@ -92,11 +92,14 @@ class Figure:
         self.x, self.y = 5, 1
         self.Stop = False
         self.num_rotation = 0
+        self.dx = 0
         self.update()
 
     def update(self):
         if board.scan_down(self.coords, (self.x, self.y)):
             board.change_board(self.coords, (self.x, self.y), 0)
+            self.x += self.dx
+            self.dx = 0
             self.y += 1
             board.change_board(self.coords, (self.x, self.y), self.color)
         else:
@@ -114,8 +117,10 @@ class Figure:
             board.change_board(self.coords, (self.x, self.y), self.color)
 
     def Move(self, vector):
-        print("Move " + vector)
-
+        if vector == 'left':
+            self.dx -= 1
+        elif vector == 'right':
+            self.dx += 1
 
 def Check_Board():
     pass
@@ -134,7 +139,7 @@ def start_screen():
     intro_text = ["УПРАВЛЕНИЕ", "",
                   "Стрелки влево и вправо - перемещение фигуры влево-вправо",
                   "Стрелка вверх - разворот фигуры по часовой стрелке",
-                  "z - разворот фигуры против часовой стрелки",
+                  "Z - разворот фигуры против часовой стрелки",
                   "Стрелка Вниз - опустить фигуру вниз на 1 клетку",
                   "Пробел - опустить фигуру полностью",
                   "Левый Shift - отложить фигуру на хранение"]
