@@ -125,6 +125,11 @@ class Figure:
         flag = True
         self.update(flag)
 
+    def move_d(self):
+        pass
+
+
+
 def Check_Board():
     pass
 
@@ -187,6 +192,7 @@ if __name__ == '__main__':
     Main_Figure = Figure()
     Archive_Figure = Figure()
     score = 0
+    fldown = False
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -206,6 +212,17 @@ if __name__ == '__main__':
                     Main_Figure.Move("right")
                 elif event.key == pygame.K_LSHIFT:
                     Create_Archive()
+                elif event.key == pygame.K_SPACE:
+                    fldown = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    fldown = False
+        if fldown:
+            if board.scan_down(Main_Figure.coords, (Main_Figure.x, Main_Figure.y)):
+                board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                Main_Figure.y += 1
+                board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), Main_Figure.color)
+
         screen.fill((0, 0, 0))
         if Main_Figure.Stop:
             if not Main_Figure.Lose():
