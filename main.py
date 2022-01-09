@@ -341,9 +341,11 @@ if __name__ == '__main__':
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
                     fldown = False
+                    clock.tick(60)
         screen.blit(background, (0, 0))
         if fldown:
             if board.scan_down(Main_Figure.coords, (Main_Figure.x, Main_Figure.y)):
+                clock.tick(30)
                 board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
                 Main_Figure.y += 1
                 board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), Main_Figure.color)
