@@ -305,6 +305,7 @@ if __name__ == '__main__':
     pygame.mixer.music.set_volume(0.1)
 
     score = 0
+    schet = 0
     sl = {1: 40, 2: 100, 3: 300, 4: 1200}
     fldown = False
     background = load_image('Background.jpg')
@@ -335,7 +336,19 @@ if __name__ == '__main__':
                 elif event.key == pygame.K_RIGHT:
                     Main_Figure.Move("right")
                 elif event.key == pygame.K_LSHIFT:
-                    Create_Archive()
+                    if schet == 0:
+                        Archive_Figure = Main_Figure
+                        board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                        Main_Figure.Out_next()
+                        Main_Figure = Figure(name=Next_Figure.name)
+                        Next_Figure.Out_next()
+                        Next_Figure = Figure(Next=True)
+                    elif schet == 1:
+                        board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                        Main_Figure.Out_next()
+                        Main_Figure = Figure(name=Archive_Figure.name)
+                    schet += 1
+
                 elif event.key == pygame.K_SPACE:
                     fldown = True
             elif event.type == pygame.KEYUP:
