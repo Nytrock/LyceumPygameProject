@@ -128,7 +128,7 @@ class Board:
             if coords[0] + elem[0] - 1 < 0:
                 return False
             if self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != num and \
-                self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != 0:
+                    self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != 0:
                 return False
         return True
 
@@ -137,13 +137,13 @@ class Board:
             if coords[0] + elem[0] + 1 >= len(self.board[0]):
                 return False
             if self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != num and \
-                self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != 0:
+                    self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != 0:
                 return False
         return True
 
 
 class Figure:
-    def __init__(self, name="", Next=False):
+    def __init__(self, name="", Next=False, Archive=False):
         if name == "":
             self.name = random.choice(list(types_coords.keys()))
         else:
@@ -153,18 +153,26 @@ class Figure:
         self.sprites = []
         self.Stop = False
         self.num_rotation = 0
-        if not Next:
+        if not Next and not Archive:
             self.x, self.y = 5, 1
             for elem in self.coords:
                 self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
             self.update()
-        else:
+        elif Next:
             self.x, self.y = 2, 0
             for elem in self.coords:
                 self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
             board_next.change_board(self.coords, (self.x, self.y), self.color)
             for elem in range(len(self.sprites)):
                 self.sprites[elem].Move(self.coords[elem], self.x, self.y, board_next)
+                self.sprites[elem].image = pygame.transform.scale(self.sprites[elem].image, (35, 35))
+        elif Archive:
+            self.x, self.y = 2, 0
+            for elem in self.coords:
+                self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
+            board_arch.change_board(self.coords, (self.x, self.y), self.color)
+            for elem in range(len(self.sprites)):
+                self.sprites[elem].Move(self.coords[elem], self.x, self.y, board_arch)
                 self.sprites[elem].image = pygame.transform.scale(self.sprites[elem].image, (35, 35))
 
     def update(self):
@@ -194,11 +202,7 @@ class Figure:
                     self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
 
     def Move(self, vector):
-        if vector == "down" and board.scan_down(self.coords, (self.x, self.y)):
-            board.change_board(self.coords, (self.x, self.y), 0)
-            self.y += 1
-            board.change_board(self.coords, (self.x, self.y), self.color)
-        elif vector == 'left' and board.Scan_Left(self.coords, (self.x, self.y), self.color):
+        if vector == 'left' and board.Scan_Left(self.coords, (self.x, self.y), self.color):
             board.change_board(self.coords, (self.x, self.y), 0)
             self.x -= 1
             board.change_board(self.coords, (self.x, self.y), self.color)
@@ -208,6 +212,17 @@ class Figure:
             board.change_board(self.coords, (self.x, self.y), self.color)
         for elem in range(len(self.sprites)):
             self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
+
+    def Down(self):
+        num = 0
+        while board.scan_down(self.coords, (self.x, self.y)):
+            board.change_board(self.coords, (self.x, self.y), 0)
+            self.y += 1
+            board.change_board(self.coords, (self.x, self.y), self.color)
+            num += 1
+        for elem in range(len(self.sprites)):
+            self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
+        return num
 
     def Out_next(self):
         for elem in self.sprites:
@@ -238,10 +253,6 @@ def Check_Board():
     if num:
         return num
     return []
-
-
-def Create_Archive():
-    pass
 
 
 def terminate():
@@ -293,6 +304,9 @@ if __name__ == '__main__':
     board_next = Board(4, 2)
     board_next.set_view(435, 200, 34)
 
+    board_arch = Board(4, 2)
+    board_arch.set_view(435, 370, 34)
+
     running = True
     clock = pygame.time.Clock()
     pygame.time.set_timer(pygame.USEREVENT, 500)
@@ -301,11 +315,11 @@ if __name__ == '__main__':
 
     pygame.mixer.music.load('data/Background.mp3')
     pygame.mixer.music.play(loops=-1)
-    pygame.mixer.music.play()
     pygame.mixer.music.set_volume(0.1)
 
     score = 0
     schet = 0
+    Arch = True
     sl = {1: 40, 2: 100, 3: 300, 4: 1200}
     fldown = False
     background = load_image('Background.jpg')
@@ -327,17 +341,16 @@ if __name__ == '__main__':
                     Main_Figure.Rotate(1)
                 elif event.key == pygame.K_z:
                     Main_Figure.Rotate(-1)
-                elif event.key == pygame.K_DOWN:
-                    Main_Figure.Move("down")
-                    if board.scan_down(Main_Figure.coords, (Main_Figure.x, Main_Figure.y)):
-                        score += 1
+                elif event.key == pygame.K_SPACE:
+                    score += int(Main_Figure.Down() * 1.2)
+                    Arch = True
                 elif event.key == pygame.K_LEFT:
                     Main_Figure.Move("left")
                 elif event.key == pygame.K_RIGHT:
                     Main_Figure.Move("right")
-                elif event.key == pygame.K_LSHIFT:
+                elif event.key == pygame.K_LSHIFT and Arch:
                     if schet == 0:
-                        Archive_Figure = Main_Figure
+                        Archive_Figure = Figure(name=Main_Figure.name, Archive=True)
                         board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
                         Main_Figure.Out_next()
                         Main_Figure = Figure(name=Next_Figure.name)
@@ -346,19 +359,20 @@ if __name__ == '__main__':
                     elif schet == 1:
                         board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
                         Main_Figure.Out_next()
-                        Main_Figure = Figure(name=Archive_Figure.name)
-                    schet += 1
-
-                elif event.key == pygame.K_SPACE:
+                        Archive_Figure.Out_next()
+                        Main_Figure, Archive_Figure = Figure(name=Archive_Figure.name), \
+                                                            Figure(name=Main_Figure.name, Archive=True)
+                    schet = 1
+                    Arch = False
+                elif event.key == pygame.K_DOWN:
                     fldown = True
             elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_DOWN:
                     fldown = False
-                    clock.tick(60)
         screen.blit(background, (0, 0))
         if fldown:
             if board.scan_down(Main_Figure.coords, (Main_Figure.x, Main_Figure.y)):
-                clock.tick(30)
+                clock.tick(20)
                 board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
                 Main_Figure.y += 1
                 board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), Main_Figure.color)
@@ -366,12 +380,13 @@ if __name__ == '__main__':
                     Main_Figure.sprites[i].Move(Main_Figure.coords[i], Main_Figure.x, Main_Figure.y, board)
                 score += 1
 
-        if not Main_Figure.Stop:
-            string_rendered = endGame.render(str(score), True, (254, 236, 174))
-            screen.blit(string_rendered, pygame.Rect(535, 98, 0, 0))
+        string_rendered = endGame.render(str(score), True, (254, 236, 174))
+        screen.blit(string_rendered, pygame.Rect(535, 98, 0, 0))
+        Figures_sprites.draw(screen)
         if Main_Figure.Stop:
             if not Main_Figure.Lose():
                 new_score = Check_Board()
+                Arch = True
                 if new_score:
                     score += sl[len(new_score)]
                     for i in Figures_sprites:
@@ -389,7 +404,6 @@ if __name__ == '__main__':
                 endGame = pygame.font.Font("data/Font.ttf", 58)
                 string_rendered = endGame.render("Score: " + str(score), True, (220, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(200, 500, 0, 0))
-        Figures_sprites.draw(screen)
         screen.blit(top, (0, 0))
         clock.tick(60)
         pygame.display.flip()
