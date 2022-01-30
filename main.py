@@ -135,21 +135,21 @@ class Board:
         return True
 
     # Проверка свободы слева
-    def Scan_Left(self, list_, coords, num):
+    def Scan_Left(self, list_, coords):
         for elem in list_:
             if coords[0] + elem[0] - 1 < 0:
                 return False
-            if self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != num and \
+            if (elem[0] - 1, elem[1]) not in list_ and \
                     self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != 0:
                 return False
         return True
 
     # проверка свободы справа
-    def Scan_Right(self, list_, coords, num):
+    def Scan_Right(self, list_, coords):
         for elem in list_:
             if coords[0] + elem[0] + 1 >= len(self.board[0]):
                 return False
-            if self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != num and \
+            if (elem[0] + 1, elem[1]) not in list_ and \
                     self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != 0:
                 return False
         return True
@@ -220,11 +220,11 @@ class Figure:
 
     # Движение влево-вправо
     def Move(self, vector):
-        if vector == 'left' and board.Scan_Left(self.coords, (self.x, self.y), self.color):
+        if vector == 'left' and board.Scan_Left(self.coords, (self.x, self.y)):
             board.change_board(self.coords, (self.x, self.y), 0)
             self.x -= 1
             board.change_board(self.coords, (self.x, self.y), self.color)
-        elif vector == 'right' and board.Scan_Right(self.coords, (self.x, self.y), self.color):
+        elif vector == 'right' and board.Scan_Right(self.coords, (self.x, self.y)):
             board.change_board(self.coords, (self.x, self.y), 0)
             self.x += 1
             board.change_board(self.coords, (self.x, self.y), self.color)
@@ -431,9 +431,11 @@ if __name__ == '__main__':
                         Arch = True
                     # Движение влево
                     elif event.key == pygame.K_LEFT:
+                        Main_Figure.Move("left")
                         flleft = True
                     # Движенеи вправо
                     elif event.key == pygame.K_RIGHT:
+                        Main_Figure.Move("right")
                         flright = True
                     # Архив
                     elif event.key == pygame.K_LSHIFT and Arch:
@@ -497,7 +499,8 @@ if __name__ == '__main__':
         screen.blit(top, (0, 0))
         # При остановке фигуры
         if Main_Figure.Stop:
-            sound1.play()
+            if BackMusic:
+                sound1.play()
             if not Main_Figure.Lose():
                 new_score = Check_Board()
                 Arch = True
