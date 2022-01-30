@@ -309,7 +309,8 @@ if __name__ == '__main__':
 
     running = True
     clock = pygame.time.Clock()
-    pygame.time.set_timer(pygame.USEREVENT, 500)
+    FPS = 400
+    pygame.time.set_timer(pygame.USEREVENT, FPS)
 
     start_screen()
 
@@ -319,6 +320,7 @@ if __name__ == '__main__':
 
     score = 0
     schet = 0
+    level = 1
     Arch = True
     sl = {1: 40, 2: 100, 3: 300, 4: 1200}
     fldown = False
@@ -339,6 +341,12 @@ if __name__ == '__main__':
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     Main_Figure.Rotate(1)
+                elif event.key == pygame.K_q:
+                    if level < 16:
+                        level += 1
+                        FPS -= 24
+                        pygame.time.set_timer(pygame.USEREVENT, FPS)
+                        print(level)
                 elif event.key == pygame.K_z:
                     Main_Figure.Rotate(-1)
                 elif event.key == pygame.K_SPACE:
@@ -405,6 +413,6 @@ if __name__ == '__main__':
                 string_rendered = endGame.render("Score: " + str(score), True, (220, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(200, 500, 0, 0))
         screen.blit(top, (0, 0))
-        clock.tick(60)
+        clock.tick(FPS)
         pygame.display.flip()
     pygame.quit()
