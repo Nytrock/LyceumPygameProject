@@ -1,1 +1,1 @@
-Second project for Yandex.Lyceum.
+Second project for Yandex.Lyceum - Tetris on pygame.
