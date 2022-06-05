@@ -27,7 +27,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9d1d2382-26c0-4cbb-9971-6fd5f52278b4" name="Default Changelist" comment="Релиз получается">
+      <change afterPath="$PROJECT_DIR$/requiremets.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Tetris1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Tetris1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_09_01_2022_13_52__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_09_01_2022_13_52__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Background.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/Background.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Background.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/data/audio/Background.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/BlockFall.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/data/audio/BlockFall.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Font.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/fonts/Font.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Game Over.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/data/audio/Game Over.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/I-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/I-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/J-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/J-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/L-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/L-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/LineClear.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/data/audio/LineClear.mp3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/O-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/O-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/S-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/S-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Start.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/Start.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Start.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/fonts/Start.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/T-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/T-block.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Top.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/Top.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Z-block.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/img/Z-block.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,6 +59,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Freeze Requirements File" />
       </list>
     </option>
   </component>
@@ -50,19 +71,27 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="23kDBsP3dKOKalA8xnFrlYAeL8w" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\SavvaNew\PycharmProjects\Tetris1\data" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\SavvaNew\PycharmProjects\Lyceum_Pygame_Project\data\audio" />
+      <recent name="C:\Users\SavvaNew\PycharmProjects\Lyceum_Pygame_Project\data\font" />
+      <recent name="C:\Users\SavvaNew\PycharmProjects\Lyceum_Pygame_Project\data\img" />
     </key>
   </component>
   <component name="RunManager" selected="Python.main">
@@ -200,58 +229,11 @@
         <entry key="1" value="TOOL_WINDOW" />
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавил мгновенный спуск и перенес туда карман Димы, отображение спрайтов сделал" />
     <MESSAGE value="Слегка уыеличил качество заднего фона" />
     <MESSAGE value="Релиз получается" />
     <option name="LAST_COMMIT_MESSAGE" value="Релиз получается" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="702" y="322" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1643376606964">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="702" y="322" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1643376606964" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1643453045090">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1643453045090" />
-    <state width="1899" height="252" key="GridCell.Tab.0.bottom" timestamp="1643558315223">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="252" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1643558315223" />
-    <state width="1899" height="252" key="GridCell.Tab.0.center" timestamp="1643558315223">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="252" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1643558315223" />
-    <state width="1899" height="252" key="GridCell.Tab.0.left" timestamp="1643558315222">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="252" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1643558315222" />
-    <state width="1899" height="252" key="GridCell.Tab.0.right" timestamp="1643558315223">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="252" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1643558315223" />
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1643381062192">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1643381062192" />
-    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1643381062191">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1643381062191" />
-    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1643381062191">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1643381062191" />
-    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1643381062192">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1899" height="348" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1643381062192" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1643536009492">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1643536009492" />
   </component>
 </project>

@@ -6,32 +6,32 @@ import os
 import random
 
 # Константы
-types_coords = {'O': ([(0, 0), (-1, 0), (0, 1), (-1, 1)], 1),
-                'I': ([(0, 0), (-1, 0), (-2, 0), (1, 0)], 2),
-                'S': ([(0, 0), (1, 0), (0, 1), (-1, 1)], 3),
-                'Z': ([(0, 0), (-1, 0), (0, 1), (1, 1)], 4),
-                'L': ([(0, 0), (-1, 0), (-1, 1), (1, 0)], 5),
-                'J': ([(0, 0), (-1, 0), (1, 1), (1, 0)], 6),
-                'T': ([(0, 0), (-1, 0), (0, 1), (1, 0)], 7)}
-types_rotations = {'O': [[(0, 0), (-1, 0), (0, 1), (-1, 1)]],
-                   'I': [[(0, 0), (-1, 0), (-2, 0), (1, 0)], [(0, 0), (0, 1), (0, 2), (0, -1)]],
-                   'S': [[(0, 0), (1, 0), (0, 1), (-1, 1)], [(0, 0), (1, 0), (0, -1), (1, 1)]],
-                   'Z': [[(0, 0), (-1, 0), (0, 1), (1, 1)], [(0, 0), (1, 0), (1, -1), (0, 1)]],
-                   'L': [[(0, 0), (-1, 0), (-1, 1), (1, 0)], [(0, 0), (0, 1), (-1, -1), (0, -1)],
+types_coordinates = {"O": ([(0, 0), (-1, 0), (0, 1), (-1, 1)], 1),
+                     "I": ([(0, 0), (-1, 0), (-2, 0), (1, 0)], 2),
+                     "S": ([(0, 0), (1, 0), (0, 1), (-1, 1)], 3),
+                     "Z": ([(0, 0), (-1, 0), (0, 1), (1, 1)], 4),
+                     "L": ([(0, 0), (-1, 0), (-1, 1), (1, 0)], 5),
+                     "J": ([(0, 0), (-1, 0), (1, 1), (1, 0)], 6),
+                     "T": ([(0, 0), (-1, 0), (0, 1), (1, 0)], 7)}
+types_rotations = {"O": [[(0, 0), (-1, 0), (0, 1), (-1, 1)]],
+                   "I": [[(0, 0), (-1, 0), (-2, 0), (1, 0)], [(0, 0), (0, 1), (0, 2), (0, -1)]],
+                   "S": [[(0, 0), (1, 0), (0, 1), (-1, 1)], [(0, 0), (1, 0), (0, -1), (1, 1)]],
+                   "Z": [[(0, 0), (-1, 0), (0, 1), (1, 1)], [(0, 0), (1, 0), (1, -1), (0, 1)]],
+                   "L": [[(0, 0), (-1, 0), (-1, 1), (1, 0)], [(0, 0), (0, 1), (-1, -1), (0, -1)],
                          [(0, 0), (-1, 0), (1, -1), (1, 0)], [(0, 0), (0, 1), (1, 1), (0, -1)]],
-                   'J': [[(0, 0), (-1, 0), (1, 1), (1, 0)], [(0, 0), (0, 1), (-1, 1), (0, -1)],
+                   "J": [[(0, 0), (-1, 0), (1, 1), (1, 0)], [(0, 0), (0, 1), (-1, 1), (0, -1)],
                          [(0, 0), (-1, 0), (-1, -1), (1, 0)], [(0, 0), (0, 1), (1, -1), (0, -1)]],
-                   'T': [[(0, 0), (-1, 0), (0, 1), (1, 0)], [(0, 0), (0, -1), (0, 1), (-1, 0)],
+                   "T": [[(0, 0), (-1, 0), (0, 1), (1, 0)], [(0, 0), (0, -1), (0, 1), (-1, 0)],
                          [(0, 0), (-1, 0), (0, -1), (1, 0)], [(0, 0), (0, -1), (0, 1), (1, 0)]]}
 
 
 # Стандартный класс
 def load_image(name, color_key=None):
-    fullname = os.path.join('data', name)
+    fullname = os.path.join("data/img", name)
     try:
         image = pygame.image.load(fullname)
     except pygame.error as message:
-        print('Не удаётся загрузить:', name)
+        print("Не удаётся загрузить:", name)
         raise SystemExit(message)
     image = image.convert_alpha()
     if color_key is not None:
@@ -91,66 +91,66 @@ class Board:
                     x * self.cell_size + self.left, y * self.cell_size + self.top, self.cell_size,
                     self.cell_size), 1)
 
-    # Именение положения фигуры
-    def change_board(self, list_, coords, num):
-        x, y = coords
+    # Изменение положения фигуры
+    def change_board(self, list_, coordinates, number):
+        x, y = coordinates
         for elem in list_:
-            self.board[y + elem[1]][x + elem[0]] = num
+            self.board[y + elem[1]][x + elem[0]] = number
 
     # Проверка свободы внизу
-    def scan_down(self, list_, coords):
+    def scan_down(self, list_, coordinates):
         free_cubes = []
         for elem in list_:
             if (elem[0], elem[1] + 1) not in list_:
                 free_cubes.append(elem)
         for elem in free_cubes:
-            if coords[1] + elem[1] + 1 >= len(self.board):
+            if coordinates[1] + elem[1] + 1 >= len(self.board):
                 return False
-            if self.board[coords[1] + elem[1] + 1][coords[0] + elem[0]] != 0:
+            if self.board[coordinates[1] + elem[1] + 1][coordinates[0] + elem[0]] != 0:
                 return False
         return True
 
     # Проверка того, не выходит ли фигура за пределы поля
     @staticmethod
-    def scan_up(list_, coords):
+    def scan_up(list_, coordinates):
         free_cubes = []
         for elem in list_:
             if (elem[0], elem[1] - 1) not in list_:
                 free_cubes.append(elem)
         for elem in free_cubes:
-            if coords[1] + elem[1] - 1 < 3:
+            if coordinates[1] + elem[1] - 1 < 3:
                 return True
         return False
 
     # Может ли фигура вращаться
-    def Check_Rotate(self, list_, coords, num):
+    def Check_Rotate(self, list_, coordinates, number):
         for elem in list_:
-            if 0 <= coords[1] + elem[1] <= len(self.board) - 1 and \
-                    0 <= coords[0] + elem[0] <= len(self.board[0]) - 1:
-                if self.board[coords[1] + elem[1]][coords[0] + elem[0]] != 0 and \
-                        self.board[coords[1] + elem[1]][coords[0] + elem[0]] != num:
+            if 0 <= coordinates[1] + elem[1] <= len(self.board) - 1 and \
+                    0 <= coordinates[0] + elem[0] <= len(self.board[0]) - 1:
+                if self.board[coordinates[1] + elem[1]][coordinates[0] + elem[0]] != 0 and \
+                        self.board[coordinates[1] + elem[1]][coordinates[0] + elem[0]] != number:
                     return False
             else:
                 return False
         return True
 
     # Проверка свободы слева
-    def Scan_Left(self, list_, coords):
+    def Scan_Left(self, list_, coordinates):
         for elem in list_:
-            if coords[0] + elem[0] - 1 < 0:
+            if coordinates[0] + elem[0] - 1 < 0:
                 return False
             if (elem[0] - 1, elem[1]) not in list_ and \
-                    self.board[coords[1] + elem[1]][coords[0] + elem[0] - 1] != 0:
+                    self.board[coordinates[1] + elem[1]][coordinates[0] + elem[0] - 1] != 0:
                 return False
         return True
 
     # проверка свободы справа
-    def Scan_Right(self, list_, coords):
+    def Scan_Right(self, list_, coordinates):
         for elem in list_:
-            if coords[0] + elem[0] + 1 >= len(self.board[0]):
+            if coordinates[0] + elem[0] + 1 >= len(self.board[0]):
                 return False
             if (elem[0] + 1, elem[1]) not in list_ and \
-                    self.board[coords[1] + elem[1]][coords[0] + elem[0] + 1] != 0:
+                    self.board[coordinates[1] + elem[1]][coordinates[0] + elem[0] + 1] != 0:
                 return False
         return True
 
@@ -159,89 +159,89 @@ class Board:
 class Figure:
     def __init__(self, name="", Next=False, Archive=False):
         if name == "":
-            self.name = random.choice(list(types_coords.keys()))
+            self.name = random.choice(list(types_coordinates.keys()))
         else:
             self.name = name
         self.dx = 0
-        self.coords, self.color = types_coords[self.name]
+        self.coordinates, self.color = types_coordinates[self.name]
         self.sprites = []
         self.Stop = False
         self.num_rotation = 0
         if not Next and not Archive:
             self.x, self.y = 5, 1
-            for elem in self.coords:
+            for elem in self.coordinates:
                 self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
             self.update()
         elif Next:
             self.x, self.y = 2, 0
-            for elem in self.coords:
+            for elem in self.coordinates:
                 self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
-            board_next.change_board(self.coords, (self.x, self.y), self.color)
+            board_next.change_board(self.coordinates, (self.x, self.y), self.color)
             for elem in range(len(self.sprites)):
-                self.sprites[elem].Move(self.coords[elem], self.x, self.y, board_next)
+                self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board_next)
                 self.sprites[elem].image = pygame.transform.scale(self.sprites[elem].image, (35, 35))
         elif Archive:
             self.x, self.y = 2, 0
-            for elem in self.coords:
+            for elem in self.coordinates:
                 self.sprites.append(Figure_Sprite(self.name, elem, self.x, self.y, board))
-            board_arch.change_board(self.coords, (self.x, self.y), self.color)
+            board_arch.change_board(self.coordinates, (self.x, self.y), self.color)
             for elem in range(len(self.sprites)):
-                self.sprites[elem].Move(self.coords[elem], self.x, self.y, board_arch)
+                self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board_arch)
                 self.sprites[elem].image = pygame.transform.scale(self.sprites[elem].image, (35, 35))
 
     # Движение вниз
     def update(self):
-        if board.scan_down(self.coords, (self.x, self.y)):
-            board.change_board(self.coords, (self.x, self.y), 0)
+        if board.scan_down(self.coordinates, (self.x, self.y)):
+            board.change_board(self.coordinates, (self.x, self.y), 0)
             self.y += 1
             for elem in range(len(self.sprites)):
-                self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
-            board.change_board(self.coords, (self.x, self.y), self.color)
+                self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board)
+            board.change_board(self.coordinates, (self.x, self.y), self.color)
         else:
             self.Stop = True
 
-    # Проверка проирыша
+    # Проверка проигрыша
     def Lose(self):
-        if board.scan_up(self.coords, (self.x, self.y)):
+        if board.scan_up(self.coordinates, (self.x, self.y)):
             return True
         return False
 
     # Поворот
-    def Rotate(self, num):
-        if board.scan_down(self.coords, (self.x, self.y)):
+    def Rotate(self, number):
+        if board.scan_down(self.coordinates, (self.x, self.y)):
             rotations = types_rotations[self.name]
-            self.num_rotation = (self.num_rotation + num) % (len(rotations))
+            self.num_rotation = (self.num_rotation + number) % (len(rotations))
             if board.Check_Rotate(rotations[self.num_rotation], (self.x, self.y), self.color):
-                board.change_board(self.coords, (self.x, self.y), 0)
-                self.coords = rotations[self.num_rotation]
-                board.change_board(self.coords, (self.x, self.y), self.color)
+                board.change_board(self.coordinates, (self.x, self.y), 0)
+                self.coordinates = rotations[self.num_rotation]
+                board.change_board(self.coordinates, (self.x, self.y), self.color)
                 for elem in range(len(self.sprites)):
-                    self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
+                    self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board)
 
     # Движение влево-вправо
     def Move(self, vector):
-        if vector == 'left' and board.Scan_Left(self.coords, (self.x, self.y)):
-            board.change_board(self.coords, (self.x, self.y), 0)
+        if vector == "left" and board.Scan_Left(self.coordinates, (self.x, self.y)):
+            board.change_board(self.coordinates, (self.x, self.y), 0)
             self.x -= 1
-            board.change_board(self.coords, (self.x, self.y), self.color)
-        elif vector == 'right' and board.Scan_Right(self.coords, (self.x, self.y)):
-            board.change_board(self.coords, (self.x, self.y), 0)
+            board.change_board(self.coordinates, (self.x, self.y), self.color)
+        elif vector == "right" and board.Scan_Right(self.coordinates, (self.x, self.y)):
+            board.change_board(self.coordinates, (self.x, self.y), 0)
             self.x += 1
-            board.change_board(self.coords, (self.x, self.y), self.color)
+            board.change_board(self.coordinates, (self.x, self.y), self.color)
         for elem in range(len(self.sprites)):
-            self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
+            self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board)
 
-    # Движение вниз
+    # Мгновенное движение вниз
     def Down(self):
-        num = 0
-        while board.scan_down(self.coords, (self.x, self.y)):
-            board.change_board(self.coords, (self.x, self.y), 0)
+        number = 0
+        while board.scan_down(self.coordinates, (self.x, self.y)):
+            board.change_board(self.coordinates, (self.x, self.y), 0)
             self.y += 1
-            board.change_board(self.coords, (self.x, self.y), self.color)
-            num += 1
+            board.change_board(self.coordinates, (self.x, self.y), self.color)
+            number += 1
         for elem in range(len(self.sprites)):
-            self.sprites[elem].Move(self.coords[elem], self.x, self.y, board)
-        return num
+            self.sprites[elem].Move(self.coordinates[elem], self.x, self.y, board)
+        return number
 
     # Удаление фигуры из окна показа следующего
     def Out_next(self):
@@ -266,15 +266,15 @@ class Figure_Sprite(Sprite):
 
 # Проверка заполненности линий
 def Check_Board():
-    num = []
+    number = []
     for elem in range(len(board.board)):
         if 0 not in board.board[elem]:
-            num.append(elem)
+            number.append(elem)
             up = board.board[:elem]
             down = board.board[elem + 1:]
             board.board = [list(map(lambda x: 0, board.board[elem]))] + up + down
-    if num:
-        return num
+    if number:
+        return number
     return []
 
 
@@ -294,13 +294,13 @@ def start_screen():
                   "Стрелка Вниз - опустить фигуру вниз на 1 клетку",
                   "Пробел - опустить фигуру полностью",
                   "Левый Shift - отложить фигуру на хранение",
-                  'Q - увеличить скорость игры',
-                  '',
-                  '               Для начала игры нажми любую кнопку           ']
+                  "Q - увеличить скорость игры",
+                  "",
+                  "               Для начала игры нажми любую кнопку           "]
 
-    fon = pygame.transform.scale(load_image('Start.jpg'), (590, 960))
-    screen.blit(fon, (0, 0))
-    Font = pygame.font.Font('data/Start.ttf', 15)
+    background_image = pygame.transform.scale(load_image("Start.jpg"), (590, 960))
+    screen.blit(background_image, (0, 0))
+    Font = pygame.font.Font("data/fonts/Start.ttf", 15)
     text_coord = 60
     for line in intro_text:
         string_render = Font.render(line, True, (220, 236, 174))
@@ -324,8 +324,8 @@ def start_screen():
 
 # Очистка спрайтов
 def New_game():
-    for i in Figures_sprites:
-        Figures_sprites.remove(i)
+    for sprite in Figures_sprites:
+        Figures_sprites.remove(sprite)
 
 
 # Кодирование лучшего счёта
@@ -345,7 +345,7 @@ def Decode(n):
 
 
 # Основа
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Создание экрана и основных полей
     Figures_sprites = SpriteGroup()
     pygame.init()
@@ -360,7 +360,7 @@ if __name__ == '__main__':
     board_arch = Board(4, 2)
     board_arch.set_view(435, 370, 34)
 
-    # СОздаем собственный таймер на скорость игры
+    # Создаем собственный таймер на скорость игры
     running = True
     clock = pygame.time.Clock()
     FPS = 450
@@ -368,37 +368,37 @@ if __name__ == '__main__':
     # Стартовый экран
     start_screen()
     # Звуки
-    pygame.mixer.music.load('data/Background.mp3')
+    pygame.mixer.music.load("data/audio/Background.mp3")
     pygame.mixer.music.play(loops=-1)
     pygame.mixer.music.set_volume(0.1)
-    sound1 = pygame.mixer.Sound('data/BlockFall.mp3')
+    sound1 = pygame.mixer.Sound("data/audio/BlockFall.mp3")
     sound1.set_volume(0.5)
-    sound2 = pygame.mixer.Sound('data/LineClear.mp3')
+    sound2 = pygame.mixer.Sound("data/audio/LineClear.mp3")
     sound2.set_volume(0.5)
     BackMusic = True
 
     # Настройка счёта, архива и загрузка изображений
     score = 0
-    file = open("Score.txt", 'r', encoding="utf-8")
+    file = open("Score.txt", "r", encoding="utf-8")
     num = int(file.readline())
     decoded_num = Decode(num)
     BestScore = decoded_num
-    schet = 0
+    archive_value = 0
     level = 1
     Arch = True
     sl = {1: 40, 2: 100, 3: 300, 4: 1200}
-    fldown = False
-    flright = False
-    flleft = False
-    background = load_image('Background.jpg')
-    top = load_image('Top.png')
+    flyDown = False
+    flyRight = False
+    flyLeft = False
+    background = load_image("Background.jpg")
+    top = load_image("Top.png")
     # Создание стартовых фигур
     Main_Figure = Figure()
     Archive_Figure = None
     Next_Figure = Figure(Next=True)
     while running:
-        font = pygame.font.Font("data/Font.ttf", 23)
-        endGame = pygame.font.Font("data/Font.ttf", 23)
+        font = pygame.font.Font("data/fonts/Font.ttf", 23)
+        endGame = pygame.font.Font("data/fonts/Font.ttf", 23)
         for event in pygame.event.get():
             # Выход из игры
             if event.type == pygame.QUIT:
@@ -406,9 +406,9 @@ if __name__ == '__main__':
             # Обновление поля
             if event.type == pygame.USEREVENT and not Main_Figure.Stop:
                 Main_Figure.update()
-                if flleft:
+                if flyLeft:
                     Main_Figure.Move("left")
-                if flright:
+                if flyRight:
                     Main_Figure.Move("right")
             elif event.type == pygame.KEYDOWN:
                 # Если игра не закончилась
@@ -432,35 +432,35 @@ if __name__ == '__main__':
                     # Движение влево
                     elif event.key == pygame.K_LEFT:
                         Main_Figure.Move("left")
-                        flleft = True
-                    # Движенеи вправо
+                        flyLeft = True
+                    # Движение вправо
                     elif event.key == pygame.K_RIGHT:
                         Main_Figure.Move("right")
-                        flright = True
+                        flyRight = True
                     # Архив
                     elif event.key == pygame.K_LSHIFT and Arch:
-                        if schet == 0:
+                        if archive_value == 0:
                             Archive_Figure = Figure(name=Main_Figure.name, Archive=True)
-                            board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                            board.change_board(Main_Figure.coordinates, (Main_Figure.x, Main_Figure.y), 0)
                             Main_Figure.Out_next()
                             Main_Figure = Figure(name=Next_Figure.name)
                             Next_Figure.Out_next()
                             Next_Figure = Figure(Next=True)
-                        elif schet == 1:
-                            board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                        elif archive_value == 1:
+                            board.change_board(Main_Figure.coordinates, (Main_Figure.x, Main_Figure.y), 0)
                             Main_Figure.Out_next()
                             Archive_Figure.Out_next()
                             Main_Figure, Archive_Figure = Figure(name=Archive_Figure.name), \
                                                           Figure(name=Main_Figure.name, Archive=True)
-                        schet = 1
+                        archive_value = 1
                         Arch = False
                     # Спуск вниз
                     elif event.key == pygame.K_DOWN:
-                        fldown = True
+                        flyDown = True
                 else:
                     # Начало новой игры
                     New_game()
-                    pygame.mixer.music.load('data/Background.mp3')
+                    pygame.mixer.music.load("data/audio/Background.mp3")
                     pygame.mixer.music.play(loops=-1)
                     pygame.mixer.music.set_volume(0.1)
                     board = Board(10, 24)
@@ -476,20 +476,20 @@ if __name__ == '__main__':
                     Next_Figure = Figure(Next=True)
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
-                    fldown = False
+                    flyDown = False
                 elif event.key == pygame.K_LEFT:
-                    flleft = False
+                    flyLeft = False
                 elif event.key == pygame.K_RIGHT:
-                    flright = False
+                    flyRight = False
         screen.blit(background, (0, 0))
-        if fldown:
-            if board.scan_down(Main_Figure.coords, (Main_Figure.x, Main_Figure.y)):
+        if flyDown:
+            if board.scan_down(Main_Figure.coordinates, (Main_Figure.x, Main_Figure.y)):
                 clock.tick(20)
-                board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), 0)
+                board.change_board(Main_Figure.coordinates, (Main_Figure.x, Main_Figure.y), 0)
                 Main_Figure.y += 1
-                board.change_board(Main_Figure.coords, (Main_Figure.x, Main_Figure.y), Main_Figure.color)
+                board.change_board(Main_Figure.coordinates, (Main_Figure.x, Main_Figure.y), Main_Figure.color)
                 for i in range(len(Main_Figure.sprites)):
-                    Main_Figure.sprites[i].Move(Main_Figure.coords[i], Main_Figure.x, Main_Figure.y, board)
+                    Main_Figure.sprites[i].Move(Main_Figure.coordinates[i], Main_Figure.x, Main_Figure.y, board)
         # Отображение текста
         string_rendered = endGame.render(str(score), True, (254, 236, 174))
         screen.blit(string_rendered, pygame.Rect(535, 98, 0, 0))
@@ -518,30 +518,30 @@ if __name__ == '__main__':
             else:
                 # Конец игры
                 if score > BestScore:
-                    open("Score.txt", 'w').close()
-                    file = open("Score.txt", 'w', encoding='utf-8')
+                    open("Score.txt", "w").close()
+                    file = open("Score.txt", "w", encoding="utf-8")
                     file.write(str(Code(score)))
                     BestScore = score
                 if BackMusic:
-                    pygame.mixer.music.load('data/Game Over.mp3')
+                    pygame.mixer.music.load("data/audio/Game Over.mp3")
                     pygame.mixer.music.play(loops=-1)
                     pygame.mixer.music.set_volume(0.1)
                     BackMusic = False
-                fon = pygame.transform.scale(load_image('Start.jpg'), (590, 960))
+                fon = pygame.transform.scale(load_image("Start.jpg"), (590, 960))
                 screen.blit(fon, (0, 0))
-                endGame = pygame.font.Font("data/Font.ttf", 116)
+                endGame = pygame.font.Font("data/fonts/Font.ttf", 116)
                 string_rendered = endGame.render("You Lose",
                                                  True, (254, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(0, 100, 0, 0))
-                endGame = pygame.font.Font("data/Font.ttf", 58)
+                endGame = pygame.font.Font("data/fonts/Font.ttf", 58)
                 string_rendered = endGame.render("Score: " + str(score),
                                                  True, (220, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(130, 250, 0, 0))
-                endGame = pygame.font.Font("data/Font.ttf", 48)
+                endGame = pygame.font.Font("data/fonts/Font.ttf", 48)
                 string_rendered = endGame.render("Best Score: " + str(BestScore),
                                                  True, (220, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(90, 350, 0, 0))
-                endGame = pygame.font.Font("data/Font.ttf", 30)
+                endGame = pygame.font.Font("data/fonts/Font.ttf", 30)
                 string_rendered = endGame.render("For new game press any button",
                                                  True, (220, 236, 174))
                 screen.blit(string_rendered, pygame.Rect(20, 920, 0, 0))
