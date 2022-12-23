@@ -511,6 +511,9 @@ if __name__ == "__main__":
                         if (i.rect.y - board.top) // 41 in new_score:
                             Figures_sprites.remove(i)
                         elif (i.rect.y - board.top) // 41 < max(new_score):
+                            if Archive_Figure is not None:
+                                if i in Archive_Figure.sprites:
+                                    continue
                             i.rect = pygame.Rect(i.rect.x, i.rect.y + 41 * len(new_score), 42, 42)
                 Main_Figure = Figure(name=Next_Figure.name)
                 Next_Figure.Out_next()
