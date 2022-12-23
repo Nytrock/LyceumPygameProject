@@ -267,12 +267,15 @@ class Figure_Sprite(Sprite):
 # Проверка заполненности линий
 def Check_Board():
     number = []
-    for elem in range(len(board.board)):
-        if 0 not in board.board[elem]:
-            number.append(elem)
-            up = board.board[:elem]
-            down = board.board[elem + 1:]
-            board.board = [list(map(lambda x: 0, board.board[elem]))] + up + down
+    while True:
+        for elem in range(len(board.board)):
+            if 0 not in board.board[elem]:
+                number.append(elem)
+                up = board.board[:elem]
+                down = board.board[elem + 1:]
+                board.board = [list(map(lambda x: 0, board.board[elem]))] + up + down
+                continue
+        break
     if number:
         return number
     return []
@@ -507,14 +510,15 @@ if __name__ == "__main__":
                 if new_score:
                     sound2.play()
                     score += sl[len(new_score)] * level
-                    for i in Figures_sprites:
-                        if (i.rect.y - board.top) // 41 in new_score:
-                            Figures_sprites.remove(i)
-                        elif (i.rect.y - board.top) // 41 < max(new_score):
-                            if Archive_Figure is not None:
-                                if i in Archive_Figure.sprites:
-                                    continue
-                            i.rect = pygame.Rect(i.rect.x, i.rect.y + 41 * len(new_score), 42, 42)
+                    for y in new_score:
+                        for i in Figures_sprites:
+                            if (i.rect.y - board.top) // 41 == y:
+                                Figures_sprites.remove(i)
+                            elif (i.rect.y - board.top) // 41 < y:
+                                if Archive_Figure is not None:
+                                    if i in Archive_Figure.sprites:
+                                        continue
+                                i.rect = pygame.Rect(i.rect.x, i.rect.y + 41, 42, 42)
                 Main_Figure = Figure(name=Next_Figure.name)
                 Next_Figure.Out_next()
                 Next_Figure = Figure(Next=True)
