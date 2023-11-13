@@ -14,7 +14,7 @@
  - Клонировать репозиторий
 
 	```shell
-	git clone https://github.com/Nytrock/Lyceum_Pygame_Project.git
+	git clone https://github.com/Nytrock/LyceumPygameProject.git
 	```
 
  - Установить зависимости с помощью requirements.txt
